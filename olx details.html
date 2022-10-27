@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .container{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            border: 2px solid yellow;
+        }
+
+        #creative_div {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #inner_div {
+            border: 2px solid black;
+            width: 550px;
+            height: 580px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+
+        }
+
+        #inner_div h1 {
+            text-decoration: underline;
+            font-family: 'Courier New', Courier, monospace;
+            margin-bottom: 10px;
+        }
+
+        #inner_div img {
+            display: block;
+            margin: 3px auto;
+        }
+
+        #inner_div_p {
+            font-size: 25px;
+            font-style: italic;
+            color: blue;
+
+        }
+
+        #btn {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            /* width: 300px; */
+            height: 60px;
+            color: black;
+            background-color: white;
+            font-size: 25px;
+            margin: 10px 0;
+            border-radius: 15px;
+            cursor: pointer;
+            padding: 10px;
+        }
+        #btn:hover {
+            color: white;
+            background-color: black;
+            font-weight: bold;
+        }
+        .contact_div{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: auto;
+        }
+        .contact_div h3{
+            color: black;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            font-style: italic;
+            text-decoration: underline;
+            margin: 20px 0;
+        }
+        #msg{
+            width: 250px;
+            height: 50px;
+            color: black;
+            border: 2px solid black;
+            font-size: 25px;
+            border-radius: 16px;
+            background-color: white;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        #msg:hover
+        {
+            width: 280px;
+            height: 60px;
+            color: white;
+            background-color: blue;
+        }
+        #msg_a{
+            width: 250px;
+            height: 50px;
+            color: blue;
+            border: 2px solid blue;
+            font-size: 25px;
+            border-radius: 15px;
+            background-color: white;
+            cursor: pointer;
+        }
+        #msg_a:hover{
+            width: 280px;
+            height: 40px;
+            color: whitesmoke;
+            background-color: brown;
+        }
+
+        a{
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1> Ad Details:</h1>
+        <button id="btn" onclick="getAdDetails()"> Click me if you can</button>
+        <div id="creative_div"></div>
+    </div>
+
+    <div class="contact_div">
+        <h3> For contact the seller, click the below message button:</h3>
+        <button id="msg" onclick="initiateChat()">Contact Seller</button>
+        <a href="index.html"><button id="msg_a"> Home Page Button</button></a>
+    </div>
+        
+
+
+    <!-- Javascript code starts from here onwards: -->
+
+
+    <script type="module">
+        import {checkChatroom, createChatroom, getFirebaseAd} from "./olx firebase.js";
+
+        let data;
+        let Ad_seller_id;
+        let  Ad_seller_email;
+        
+        
+        window.getAdDetails =  async function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id')
+            
+            //getFirebaseAd(id)
+            console.log('ad id ===>', id)
+            const doc = await getFirebaseAd(id)
+            data = doc.data()
+            Ad_seller_id = data.userId;
+            Ad_seller_email = data.userEmail;
+            var div = document.getElementById('creative_div');
+    
+                div.innerHTML+=`<div id="inner_div">
+                    <h2>The image of the Ad is given below: </h2>
+                    <img src=${data.imageURL} width='500px' height='200px'>
+
+                    <h2>The Title of the Ad is given below: </h2>
+                    <p id="inner_div_p">${data.title}</p>
+
+                    <h2>The Description of the Ad is given below: </h2>
+                    <p id="inner_div_p">${data.description}</p>
+
+                    <h2>The Price of the Ad is given below: </h2>
+                    <p id="inner_div_p">${data.price}</p>
+
+                    <h2>The location of the Ad is given below: </h2>
+                    <p id="inner_div_p">${data.location}</p>
+
+                    <h2>Owner's contact number is given below: </h2>
+                    <p id="inner_div_p">${data.contact_number}</p>
+
+                    <h2>Owner's Id is given below: </h2>
+                    <p id="inner_div_p">${data.userId}</p>
+
+                    <h2>Owner's Email is given below: </h2>
+                    <p id="inner_div_p">${data.userEmail}</p>
+
+
+                    </div>`
+        }
+
+        // Function for creating room for chatting b/w seller and the buyer.
+
+        window.initiateChat = async function () {
+            console.log('Ad_Id ===>', Ad_seller_id)
+            //1. check if chatroom exists
+            let chatroom = await checkChatroom(Ad_seller_id)
+
+            //2. if not exists then create it
+            if (!chatroom) 
+            {
+                chatroom = await createChatroom(Ad_seller_id, Ad_seller_email)
+                alert(`chatroom created successfully.`);
+            } 
+            else
+            {
+                alert('chatroom already exists b/w the seller and buyer.')
+            }
+            const chatId = chatroom.id;
+
+            location.href = `olx chat.html?id=${chatId}`;
+        }
+
+    </script>
+
+    <!-- 
+1. Install nodejs from website
+2. Verify using node -v and npm -v in CMD
+3. npm install -g firebase-tools
+4. Open cmd inside project's folder
+5. firebase login
+6. firebase init
+7. move all the relevant HTML, CSS, JS & Media files
+into public folder
+8. firebase deploy -->
+
+</body>
+
+</html>

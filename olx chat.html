@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/f771057305.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <title>Chat Room</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .firstContainer {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1,
+        h3 {
+            text-align: center;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            text-decoration: underline;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 22px;
+            color: blue;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        #sent_btn,
+        #get_btn {
+            width: 200px;
+            height: 50px;
+            color: white;
+            background-color: black;
+            text-align: center;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        #msg_tex {
+            color: violet;
+            font-size: 25px;
+        }
+
+        #msg {
+            width: 250px;
+            height: 50px;
+            color: blue;
+            border: 2px solid dodgerblue;
+            font-size: 25px;
+            border-radius: 10px;
+            background-color: white;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        #msg:hover {
+
+            color: black;
+            border: 2px solid black;
+            font-size: 26px;
+            background-color: white;
+
+        }
+
+        a {
+            text-align: center;
+        }
+
+        #message_div {
+            display: block;
+            width: 100%;
+            height: 100vh;
+            background-color: #efefe5;
+        }
+
+        .secondContainer {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .message-blue {
+            display: grid;
+            margin: 15px 70% 10px 18px;
+            position: relative;
+            float: left;
+            padding: 9px;
+            background-color: #9e9e9d;
+            max-width: 50%;
+            word-wrap: break-word;
+            text-align: left;
+            width: fit-content;
+            font: 400 0.9em "Open Sans", sans-serif;
+            border-radius: 10px;
+        }
+
+        .message-blue:after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-top: 15px solid #9e9e9d;
+            border-left: 15px solid transparent;
+            /* border-right: 15px solid transparent; */
+            top: 0px;
+            left: -6px;
+        }
+
+
+        .message-orange {
+            display: grid;
+            margin: 15px 15px 10px 69%;
+            position: relative;
+            float: right;
+            padding: 9px;
+            background-color: #f8e896;
+            max-width: 50%;
+            word-wrap: break-word;
+            text-align: left;
+            font: 400 0.9em "Open Sans", sans-serif;
+            border-radius: 10px;
+        }
+
+        .message-orange:after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-top: 15px solid #f8e896;
+            /* border-left: 15px solid transparent; */
+            border-right: 15px solid transparent;
+            top: 0px;
+            right: -6px;
+        }
+
+        .msgContainer {
+            display: flex;
+            width: 100%;
+            height: 100px;
+            border: 2px solid black;
+            background-color: #F0F2F5;
+        }
+
+        #smily_face {
+            width: 40px;
+            height: 80px;
+            font-size: 25px;
+            margin: 34px 6px;
+        }
+
+        #msg_textarea {
+            width: 88%;
+            height: 80px;
+            font-size: 23px;
+            color: grey;
+            background-color: white;
+            border-radius: 15px;
+            text-indent: 15px;
+            border: 2px solid lightgrey;
+            margin: 5px 0;
+        }
+
+        #send_icon {
+            width: 40px;
+            height: 80px;
+            margin: 30px 9px;
+            font-size: 25px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="firstContainer">
+
+        <h1> Welcome to olx messenger</h1>
+        <p> Here you guys can talk with each other.</p>
+        <h3>Write your message below:</h3>
+        <div id="message_div"></div>
+        <!-- <button id="get_btn" onclick="getMessage()">Get Messages</button> -->
+        <div class="msgContainer">
+            <span data-testid="smiley" data-icon="smiley" id="smily_face" class=""><svg viewBox="0 0 24 24"
+                    class="ekdr8vow dhq51u3o">
+                    <path fill="currentColor"
+                        d="M9.153 11.603c.795 0 1.439-.879 1.439-1.962s-.644-1.962-1.439-1.962-1.439.879-1.439 1.962.644 1.962 1.439 1.962zm-3.204 1.362c-.026-.307-.131 5.218 6.063 5.551 6.066-.25 6.066-5.551 6.066-5.551-6.078 1.416-12.129 0-12.129 0zm11.363 1.108s-.669 1.959-5.051 1.959c-3.505 0-5.388-1.164-5.607-1.959 0 0 5.912 1.055 10.658 0zM11.804 1.011C5.609 1.011.978 6.033.978 12.228s4.826 10.761 11.021 10.761S23.02 18.423 23.02 12.228c.001-6.195-5.021-11.217-11.216-11.217zM12 21.354c-5.273 0-9.381-3.886-9.381-9.159s3.942-9.548 9.215-9.548 9.548 4.275 9.548 9.548c-.001 5.272-4.109 9.159-9.382 9.159zm3.108-9.751c.795 0 1.439-.879 1.439-1.962s-.644-1.962-1.439-1.962-1.439.879-1.439 1.962.644 1.962 1.439 1.962z">
+                    </path>
+                </svg></span>
+
+            <input id="msg_textarea" placeholder="Write your messsage here"></input>
+            <span onclick="sendMessage()" data-testid="send" data-icon="send" id="send_icon" class=""><svg
+                    viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" class="" version="1.1" x="0px" y="0px"
+                    enable-background="new 0 0 24 24" xml:space="preserve">
+                    <path fill="currentColor"
+                        d="M1.101,21.757L23.8,12.028L1.101,2.3l0.011,7.912l13.623,1.816L1.112,13.845 L1.101,21.757z">
+                    </path>
+                </svg></span>
+
+        </div>
+    </div>
+
+    <div class="secondContainer">
+        <p id="chat_id_p"></p>
+        <a href="index.html"><button id="msg"> Home Page Button</button></a>
+    </div>
+
+
+
+    <script type="module">
+        import { auth, sendMessageToDb, getRealtimeMessages } from "./olx firebase.js";
+        let chatroom_id;
+
+        function getChatRoomId() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const chat_id = urlParams.get('id');
+            chatroom_id = chat_id;
+
+            //getchatroom(id)
+            var chat_p = document.getElementById('chat_id_p');
+            chat_p.innerHTML = chat_id;
+        }
+        getChatRoomId();
+
+
+        window.sendMessage = async function () {
+            var msg_info = document.getElementById('msg_textarea').value;
+            try {
+                await sendMessageToDb(msg_info, chatroom_id);
+                alert("Message is successfully posted into the database.");
+            }
+            catch (e) {
+                console.log("Error occurred on posting a message: " + e.message());
+            }
+            msg_info = "";
+        }
+
+        //  window.getMessage = async function()
+        {
+            const msgElem = document.getElementById('message_div')
+
+            try {
+                let all_messages = await getMessagesFromDb(chatroom_id);
+                for (let element of all_messages) {
+                    if (element.userId == auth.currentUser.uid) {
+                        msgElem.innerHTML += `
+                        <div id="buyer_msg_div">
+                            <label> Message Buyer Id </label> <br>
+                            <h3>${element.userId} </h3> <br>
+                            <label> Message Text </label> <br>
+                            <h3>${element.text}</h3> <br> <br>
+                        `
+                    }
+                    else {
+                        msgElem.innerHTML += `
+                        <div id="sender_msg_div">
+                            <label> Message Sender Id </label> <br>
+                            <h3>${element.userId} </h3> <br>
+                            <label> Message Text </label> <br>
+                            <h3>${element.text}</h3> <br> <br>
+                        `
+                    }
+                }
+            }
+            catch (e) {
+                console.log(" An error occurred in getting the messages --> " + e.message);
+            }
+        }
+
+        realTime()
+        function realTime() {
+            // const roomId = chatroomId()
+            getRealtimeMessages(chatroom_id, (messages) => {
+                console.log(`chat HTML`)
+                console.log("room data", messages)
+                const adsElem = document.getElementById('message_div')
+                //  console.log("real id",messages[0].id)
+                adsElem.innerHTML = ''
+                for (let item of messages) {
+
+                    let color;
+
+                    if (item.userId == auth.currentUser.uid) {
+                        color = "orange"
+                        console.log("auth.currentUser.uid", item.userId)
+                    } else {
+                        color = "blue"
+                        console.log(auth.currentUser.uid)
+                    }
+                    adsElem.innerHTML += ` 
+             <div class="message-${color}" >
+                 <span>${item.text}</span>
+                 <span id="time">  ${new Date(item.createdAt).toLocaleTimeString()}</span>
+             </div>`
+                }
+
+            })
+
+        }
+
+
+
+
+    </script>
+
+</body>
+
+</html>
