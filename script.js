@@ -4,7 +4,7 @@ import {
   postAdToDb,
   uploadImage,
   getRealtimeAds
-} from "./olx firebase.js";
+} from "./app.js";
 
 
 window.signUp = function () {
