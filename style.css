@@ -536,9 +536,9 @@ footer {
 {
     color: blue;
     margin-top: 10px;
-    font-size: 25px;
-    border: 3px solid black;
-    border-radius: 10px;
+    font-size: 22px;
+    border: 2px solid black;
+    border-radius: 15px;
     text-indent: 15px;
     padding-left: 5px;
 }
