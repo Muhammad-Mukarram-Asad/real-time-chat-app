@@ -4,7 +4,7 @@ import {
   postAdToDb,
   uploadImage,
   getRealtimeAds,
-} from "./olx firebase.js";
+} from "./app.js";
 
 window.signUp = function () {
   let name = document.getElementById("name").value;
@@ -105,7 +105,7 @@ function getAds() {
 }
 
 window.goToDetail = async function (id) {
-  location.href = `olx details.html?id=${id}`;
+  location.href = `details.html?id=${id}`;
 };
 
 // window.goToDetail2 = async function (title) {
