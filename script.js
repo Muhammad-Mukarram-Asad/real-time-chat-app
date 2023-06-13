@@ -3,9 +3,8 @@ import {
   signInFirebase,
   postAdToDb,
   uploadImage,
-  getRealtimeAds
-} from "./app.js";
-
+  getRealtimeAds,
+} from "./olx firebase.js";
 
 window.signUp = function () {
   let name = document.getElementById("name").value;
@@ -18,52 +17,53 @@ window.signUp = function () {
     {
       alert("The user is registered successfully.");
     }
+    (name = ""), (email = ""), (password = "");
+    age = "";
   } catch (e) {
     const error_msg = document.getElementById("error");
     error_msg.innerHTML = e.message;
   }
-  name.value="";
-  email.value="";
-  password.value = "";
-  age.value = "";
-}
+};
 
-window.logIn = async function()
-{
+window.logIn = async function () {
   let email = document.getElementById("login_email");
   let password = document.getElementById("login_password");
-  try{
-    let userCredential = await signInFirebase(email.value, password.value)
+  try {
+    let userCredential = await signInFirebase(email.value, password.value);
 
     {
-      alert("Successfully signed in with the Id --> "+ userCredential.user.uid);
+      alert(
+        "Successfully signed in with the Id --> " + userCredential.user.uid
+      );
     }
-  }
-  catch(e)
-  {
+  } catch (e) {
     const error_msg = document.getElementById("error");
     error_msg.innerHTML = e.message;
   }
-  email.value="";
-  password.value="";
-}
-
-
-
+  email.value = "";
+  password.value = "";
+};
 
 window.show_Ad = async function () {
   var title_input = document.getElementById("title");
   var price_input = document.getElementById("price");
   var des_input = document.getElementById("description");
-  var loc_input = document.getElementById('location');
-  var contact_number = document.getElementById('contact');
+  var loc_input = document.getElementById("location");
+  var contact_number = document.getElementById("contact");
 
   debugger;
   var image = document.getElementById("image").files[0];
 
   try {
     const imageURL = await uploadImage(image);
-    postAdToDb(title_input.value, price_input.value, des_input.value, imageURL,loc_input.value,contact_number.value);
+    postAdToDb(
+      title_input.value,
+      price_input.value,
+      des_input.value,
+      imageURL,
+      loc_input.value,
+      contact_number.value
+    );
     {
       alert("Post is live now and also stored in database.");
     }
@@ -74,21 +74,20 @@ window.show_Ad = async function () {
   price_input.value = "";
   des_input.value = "";
   image.value = "";
-  loc_input.value="";
-  contact_number.value="";
+  loc_input.value = "";
+  contact_number.value = "";
 };
 
-
-getAds()
+getAds();
 function getAds() {
   //1
   getRealtimeAds((ads) => {
-      //4
-      const adsElem = document.getElementById('ads_2')
+    //4
+    const adsElem = document.getElementById("ads_2");
 
-      adsElem.innerHTML = ''
-      for (let item of ads) {
-          adsElem.innerHTML +=`
+    adsElem.innerHTML = "";
+    for (let item of ads) {
+      adsElem.innerHTML += `
           <div onclick="goToDetail('${item.id}')" class="ads_styling">
             <label id="ads_styling_label">Image: </label> 
              <img src=${item.imageURL} width='350px' height='180px'>
@@ -99,22 +98,19 @@ function getAds() {
              <label id="ads_styling_label">Product Price: </label> 
              <h2> Price: ${item.price} </h2>
              <label id="ads_styling_label">Product Seller Id: </label> 
-             <h2> Price: ${item.userId} </h2>
-      </div>`
-      }
-  })
+             <h2> Owner Id: ${item.userId} </h2>
+      </div>`;
+    }
+  });
 }
 
 window.goToDetail = async function (id) {
-  location.href = `home.html?id=${id}`;
-}
+  location.href = `olx details.html?id=${id}`;
+};
 
 // window.goToDetail2 = async function (title) {
 //   location.href = `olx details.html?title=${title}`;
 // }
-
-
-
 
 // Open login form function --> self-made f(n).
 window.open_login = function () {
@@ -122,11 +118,10 @@ window.open_login = function () {
   login_container.style.display = "block";
 };
 
-window.open_login_2 = function()
-{
+window.open_login_2 = function () {
   let login_container = document.getElementById("login_2_div");
   login_container.style.display = "block";
-}
+};
 
 // Open ad details form.
 window.openForm = function () {
@@ -147,6 +142,3 @@ window.remove_login = function () {
   login_container2.style.display = "none";
   login_container.style.display = "none";
 };
-
-
-
