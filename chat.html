@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/f771057305.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="olxChat.css" rel="stylesheet" />
+
+    <title>Chat</title>
+</head>
+
+<body>
+    <div class="firstContainer">
+        <div class="header_main_div">
+            <a href="index.html">
+                <img id="back_arrow_icon" src="https://www.svgrepo.com/show/238568/back-arrow-previous.svg"
+                    alt="back_arrow_icon" />
+            </a>
+            <div class="header_inner_div">
+                <h1> Welcome to the messenger</h1>
+            </div>
+            <img id="forward_arrow_icon"
+                src="https://thumbs.dreamstime.com/b/back-arrow-icon-vector-filled-flat-sign-solid-pictogram-isolated-white-undo-symbol-logo-illustration-pixel-perfect-88294314.jpg"
+                alt="forward_arrow_icon" />
+        </div>
+
+
+        <div id="message_div"></div>
+        <!-- <button id="get_btn" onclick="getMessage()">Get Messages</button> -->
+        <div class="msgContainer">
+            <img id="send_img" src="https://w7.pngwing.com/pngs/234/8/png-transparent-emoji-emoticon-smiley-whatsapp-symbol-emoji-sticker-%D0%B8%D0%B3%D1%80%D0%B0-%D1%81%D0%BC%D0%B0%D0%B9%D0%BB%D1%8B-yellow.png" alt="smiley_icon" />
+            <input id="msg_textarea" placeholder="Write your messsage here" />
+            <img id="send_img" src="https://www.ublux.es/wp-content/plugins/ublux-wspp-4/assets/wspp_send.png" alt="send_icon" onclick="sendMessage()" />
+
+        </div>
+    </div>
+
+    <!-- <div class="secondContainer">
+        <h3>The Chat Id</h3>
+        <p id="chat_id_p"></p>
+    </div> -->
+
+
+
+    <script type="module">
+        import { auth, sendMessageToDb, getRealtimeMessages } from "./olx firebase.js";
+        let chatroom_id;
+
+        function getChatRoomId() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const chat_id = urlParams.get('id');
+            console.log("chat_id --> ", chat_id);
+            chatroom_id = chat_id;
+            console.log("chatroom_id which is = chat_id --> ", chatroom_id);
+        }
+
+        getChatRoomId();
+
+
+        window.sendMessage = async function () {
+            var msg_info = document.getElementById('msg_textarea');
+            try {
+                await sendMessageToDb(msg_info.value, chatroom_id);
+                alert("Message is successfully posted into the database.");
+            }
+            catch (e) {
+                console.log("Error occurred on posting a message: " + e.message);
+            }
+            msg_info.value = "";
+        }
+
+        //  window.getMessage = async function()
+        // {
+        //     const msgElem = document.getElementById('message_div')
+
+        //     try {
+        //         let all_messages = await getMessagesFromDb(chatroom_id);
+        //         for (let element of all_messages) {
+        //             if (element.userId == auth.currentUser.uid) {
+        //                 msgElem.innerHTML += `
+        //                 <div id="buyer_msg_div">
+        //                     <label> Message Buyer Id </label> <br>
+        //                     <h3>${element.userId} </h3> <br>
+        //                     <label> Message Text </label> <br>
+        //                     <h3>${element.text}</h3> <br> <br>
+        //                 `
+        //             }
+        //             else {
+        //                 msgElem.innerHTML += `
+        //                 <div id="sender_msg_div">
+        //                     <label> Message Sender Id </label> <br>
+        //                     <h3>${element.userId} </h3> <br>
+        //                     <label> Message Text </label> <br>
+        //                     <h3>${element.text}</h3> <br> <br>
+        //                 `
+        //             }
+        //         }
+        //     }
+        //     catch (e) {
+        //         console.log(" An error occurred in getting the messages --> " + e.message);
+        //     }
+        // }
+
+        realTime()
+        function realTime() {
+            // const roomId = chatroomId()
+            getRealtimeMessages(chatroom_id, (messages) => {
+                console.log(`chat HTML`)
+                console.log("room data", messages)
+                const adsElem = document.getElementById('message_div')
+                //  console.log("real id",messages[0].id)
+                adsElem.innerHTML = ''
+                for (let item of messages) {
+
+                    let color;
+
+                    console.log("item.userId --> ", item.userId);
+                    console.log("auth.currentUser.uid --> ", auth.currentUser.uid);
+
+                    if (item.userId == auth.currentUser.uid) {
+                        color = "seller"
+                        console.log("auth.currentUser.uid", item.userId)
+                    } else {
+                        color = "buyer"
+                        console.log(auth.currentUser.uid)
+                    }
+
+                    adsElem.innerHTML += `
+                    <div class="message-${color}">
+                        <span id="msg_text">${item.text}</span>
+                        <span id="time">  ${item.createdAt}</span>
+                    </div>`
+                }
+
+            })
+
+        }
+
+
+
+
+    </script>
+
+</body>
+
+</html>
