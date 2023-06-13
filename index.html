@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Olx.com.pk</title>
     <script src="https://kit.fontawesome.com/f771057305.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="olx.css">
 </head>
 
 <body>
@@ -115,11 +115,11 @@
 
         <p id="ending_paragraph">By continuing, you are accepting <br>
             OLX Terms of use and Privacy Policy</p>
-        <button id="signup_btn" type="submit" onclick="signUp()">SignUp</button>
+        <button id="signupForm_btn" type="submit" onclick="signUp()">Signup Now</button>
     </div>
 
     <div id="login_2_div" style="display: none;">
-        <img onclick="remove_login()" id="cross_sign_2" src="https://icones.pro/wp-content/uploads/2021/08/icone-x-avec-cercle-bleue.png" alt="">
+        <img onclick="remove_login()" id="cross_sign_2" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8KRxxoOlx_uDpp97M_ZwdyyEvW0rk1VdLv-MwwSY&s" alt="">
         <div class="google">
             <img src="https://www.olx.com.pk/assets/iconMailLogin_noinline.248b2cbda65d833f5f8f87f18a346cc9.svg" alt="email_icon">
             <input id="login_email" type="email" placeholder="Email Address Here">
@@ -133,7 +133,7 @@
          </div>
 
          <p id="error" style="color:red;"></p>
-        <button id="signup_btn" type="submit" onclick="logIn()">LogIn</button>
+        <button id="loginForm_btn" type="submit" onclick="logIn()">Login Now</button>
 
     </div>
 
@@ -266,8 +266,7 @@
     <div id="ads"></div>
     <div id="ads_2"></div>
 
-    <button id="prod_btn" onclick="openForm()">Want to add a product Ad</button>
-    <!-- <button id="prod_btn" onclick="fetchAds()">Want to see Ad details?</button> -->
+    <button id="prod_btn" onclick="openForm()">Add a product Ad</button>
 
 
     
@@ -332,7 +331,7 @@
     <!-- Footer Section is below: -->
     <footer>
         <div class="part">
-            <h2>POPULAR CATEGORIES</h2>
+            <h3>POPULAR CATEGORIES</h3>
             <ul>
                 <li>Cars</li>
                 <li>Flats for rent</li>
@@ -342,7 +341,7 @@
         </div>
 
         <div class="part">
-            <h2>TRENDING SEARCHES</h2>
+            <h3>TRENDING SEARCHES</h3>
             <ul>
                 <li>Bikes</li>
                 <li>Watches</li>
@@ -352,7 +351,7 @@
         </div>
 
         <div class="part">
-            <h2>ABOUT US</h2>
+            <h3>ABOUT US</h3>
             <ul>
                 <li>About EMPG</li>
                 <li>OLX Blog</li>
@@ -362,7 +361,7 @@
         </div>
 
         <div class="part">
-            <h2>OLX</h2>
+            <h3>OLX</h3>
             <ul>
                 <li>Help</li>
                 <li>Sitemap</li>
@@ -372,7 +371,7 @@
         </div>
 
         <div class="part">
-            <h2>FOLLOW US</h2>
+            <h3>FOLLOW US</h3>
             <div class="social-icons">
                 <i class="fa-brands fa-facebook"></i>
                 <i class="fa-brands fa-twitter"></i>
@@ -382,13 +381,9 @@
         </div>
 
     </footer>
-    <div class="footer-h2">
-        <h2>&copy All Rights Reserved.</h2>
-        <h3> Made By: <span id="footer_span">M.Mukarram Asad.</span></h3>
-    </div>
 
-    <script type="module" src="script.js"></script>
-    <script type="module" src="app.js"></script>
+    <script type="module" src="olx.js"></script>
+    <script type="module" src="olx firebase.js"></script>
 </body>
 
 </html>
