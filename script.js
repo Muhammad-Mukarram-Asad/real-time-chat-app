@@ -108,10 +108,6 @@ window.goToDetail = async function (id) {
   location.href = `details.html?id=${id}`;
 };
 
-// window.goToDetail2 = async function (title) {
-//   location.href = `olx details.html?title=${title}`;
-// }
-
 // Open login form function --> self-made f(n).
 window.open_login = function () {
   let login_container = document.getElementById("login_form");
