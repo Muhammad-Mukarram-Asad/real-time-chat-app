@@ -91,7 +91,7 @@ async function getAdsFromDb() {
 }
 
 async function uploadImage(image) {
-  const storageREf = ref(storage, `images/${image.name}`);
+  const storageREf = ref(storage, `images/${image.name}`); // storage --> images --> image jo upload kri hai
   const snapshot = await uploadBytes(storageREf, image);
   const url = await getDownloadURL(snapshot.ref);
   return url;
@@ -116,21 +116,6 @@ function getFirebaseAd(id) {
   return getDoc(docRef)
 }
 
-// Creating a method or function for obtaining Ad details when user clicked on it.
-// async function clickedAdFromDB(title)
-// {
-  
-// const q = query(collection(db, "ads"), where("title", "==", title));
-
-// const querySnapshot = await getDocs(q);
-// let ad_array = [];
-// querySnapshot.forEach((doc) => {
-//   console.log(doc.id, " => ", doc.data());
-//   ad_array.push({ id: doc.id, ...doc.data() })
-// })
-// return ad_array;
-// };
-
 async function checkChatroom(adUserId) {
   const currentUserId = auth.currentUser.uid
   const q = query(collection(db, "chatrooms"),
@@ -138,7 +123,9 @@ async function checkChatroom(adUserId) {
       where(`users.${adUserId}`, "==", true))
 
   const querySnapshot = await getDocs(q);
-  console.log(`The current_User_Id is =${currentUserId} & \n Ad_Seller_Id is =${adUserId}`);
+  console.log(` At Checking Chatroom:
+  The current_User_Id is =${currentUserId} & \n 
+  Ad_Seller_Id is =${adUserId}`);
 
   let room;
   querySnapshot.forEach((doc) => {
@@ -148,20 +135,25 @@ async function checkChatroom(adUserId) {
   return room
 }
 
+const today_date = new Date();
+
 function createChatroom(adUserId, adSellerEmail) {
   const currentUserId = auth.currentUser.uid
-  console.log(`The current_User_Id is --> ${currentUserId} & \n  Ad_Seller_Id is --> ${adUserId}`);
+  console.log(` At Creating Chatroom: \n 
+  The current_User_Id is --> ${currentUserId} and 
+  \n  Ad_Seller_Id is --> ${adUserId}`);
+  
 
   const obj =  {
       users: { 
-          [currentUserId]: true, // dynamic object keys [key_name];
-          [adUserId]: true 
+          [`Current_User_Id ${currentUserId}`]: true, // dynamic object keys [key_name];
+          [`Ad_User_Id ${adUserId} `]: true 
       },
       user_Names:{
         Current_User_Email: auth.currentUser.email,
         Ad_Owner_Email: adSellerEmail
       },
-      createdAt: Date.now(),
+      createdAt:`${today_date.getHours()}:${today_date.getMinutes()}: ${today_date.getSeconds()}`,
       lastMessage:{}
   } 
   return addDoc(collection(db, "chatrooms"), obj)
@@ -171,23 +163,12 @@ function createChatroom(adUserId, adSellerEmail) {
 // Now addig messages to the chatrooms:
 function sendMessageToDb(text,chat_id)
 {
-  const message = {text,createdAt:Date.now(),userId:auth.currentUser.uid };
-  // const messageRef = db.collection("chatrooms").doc(chat_id).collection("messages").add(message);
-  // return messageRef;
-
+  const message = {text,
+    createdAt:`${today_date.getHours()}:${today_date.getMinutes()}: ${today_date.getSeconds()}`,
+    userId:auth.currentUser.uid };
+  
   return addDoc(collection(db,"chatrooms", chat_id, "messages"), message);
 }
-
-// async function getMessagesFromDb(chat_id)
-// {
-//   const querySnapshot = await getDocs(collection(db, "chatrooms",chat_id, "messages"));
-//   const messages = [];
-//   querySnapshot.forEach((doc) => {
-//     messages.push({ id: doc.id, ...doc.data() });
-//   });
-
-//   return messages;
-// }
 
 function getRealtimeMessages(roomId, callback) {
   
@@ -204,28 +185,6 @@ console.log(`chat firebase.`);
 
 }
 
-// function getRealtimeMessages(callback, chat_id) {
-//   //2
-//   onSnapshot(collection(db, "chatrooms",chat_id,"messages"), (querySnapshot) => {
-//       const messages = []
-
-//       querySnapshot.forEach((doc) => {
-//           messages.push({ id: doc.id, ...doc.data() })
-//       });
-//       //3
-//       callback(messages,chat_id)
-//   })
-// }
 
 export {auth, signUpFirebase, signInFirebase, uploadImage, getAdsFromDb, postAdToDb,getRealtimeAds,
   getFirebaseAd, createChatroom,checkChatroom,sendMessageToDb,getRealtimeMessages};
-
-
-
-
-
-
-
-
-
-
